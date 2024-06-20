@@ -1,0 +1,44 @@
+﻿.validation-summary {
+    background-color: #fdecec;
+    padding: 10px;
+    list-style-type: none;
+}
+
+    .validation-summary::before {
+        content: 'Ops! Verifique as mensagens abaixo';
+        color: darkred;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+
+.validation-message {
+    --text-opacity: 1;
+    color: rgba(var(--danger-rgb), var(--text-opacity)) !important;
+    padding-left: 10px;
+}
+
+    .validation-message::before {
+        content: "\26A0  ";
+    }
+
+.quickgrid[theme=default] .col-title {
+    gap: 0.4rem; /* Separate the sort indicator from title text */
+    font-weight: bold;
+ }
+
+.quickgrid[theme=default] .col-justify-start {
+   padding: 0.5rem;
+}
+
+.quickgrid[theme=default] .col-title {
+    padding: 0;
+}
+
+.cursor-not-allowed {
+    cursor: not-allowed;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}

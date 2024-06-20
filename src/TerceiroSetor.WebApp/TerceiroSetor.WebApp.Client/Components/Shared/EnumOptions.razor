@@ -1,0 +1,9 @@
+﻿
+@typeparam TEnum where TEnum : Enum
+
+<option value="0"></option>
+
+@foreach (Enum item in Enum.GetValues(typeof(TEnum)))
+{
+    <option value="@item.GetValue()">@item.GetDescription()</option>
+}

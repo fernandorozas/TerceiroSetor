@@ -1,0 +1,43 @@
+﻿@rendermode InteractiveAuto
+@inject IJSRuntime jsRuntime
+
+<li class="nav-item">
+    <a class="navbar-nav-link navbar-nav-link-icon rounded-pill" @onclick="ToggleDarkMode">
+        @if (isLightMode)
+        {
+            <i class="ph-moon"></i>
+        }
+        else
+        {
+            <i class="ph-sun"></i>
+        }
+    </a>
+</li>
+
+<script>
+    function isLightMode() {
+        const htmlTag = document.getElementsByTagName("html")[0];
+        const theme = htmlTag.getAttribute("data-color-theme");
+        const isLightMode = theme === "light";
+        const newTheme = isLightMode ? "dark" : "light";
+        htmlTag.setAttribute("data-color-theme", newTheme);
+        return isLightMode;
+    }
+</script>
+
+
+@code {
+    
+    private bool isLightMode { get; set; } = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        isLightMode = await jsRuntime.InvokeAsync<bool>("isLightMode");
+    }
+
+    private async Task ToggleDarkMode()
+    {
+        isLightMode = await jsRuntime.InvokeAsync<bool>("isLightMode");
+    }
+
+}

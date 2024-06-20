@@ -1,0 +1,27 @@
+﻿<PageTitle>@Title</PageTitle>
+
+<div class="page-header m-0">
+    <div class="page-header-content container d-lg-flex p-0">
+        <div class="d-flex">
+            @if (ShowTitle)
+            {
+                <h4 class="page-title py-1 mb-0">
+                    @Title
+                </h4>
+            }
+            <a href="#page_header" class="btn btn-light align-self-center collapsed d-lg-none border-transparent rounded-pill p-0 ms-auto" data-bs-toggle="collapse">
+                <i class="ph-caret-down collapsible-indicator ph-sm m-1"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool ShowTitle { get; set; } = true;
+
+}

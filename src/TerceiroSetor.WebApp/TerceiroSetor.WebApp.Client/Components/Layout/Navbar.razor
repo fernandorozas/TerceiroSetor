@@ -1,0 +1,39 @@
+﻿<div class="navbar navbar-expand-xl navbar-static shadow zindex-auto p-1">
+    <div class="container">
+        <BrandSection />
+        <div class="d-flex w-100 w-xl-auto overflow-auto overflow-xl-visible scrollbar-hidden border-top border-top-xl-0 order-1 order-xl-0 pt-2 pt-xl-0 mt-2 mt-xl-0">
+            <ul class="nav gap-1 justify-content-center flex-nowrap flex-xl-wrap mx-auto">
+                <li class="nav-item">
+                    <NavLink href="/" class="navbar-nav-link rounded" ActiveClass="active" Match="NavLinkMatch.All">
+                        <i class="ph-binoculars me-2"</i>
+                        Transparência
+                    </NavLink>
+                  
+                </li>
+                <li class="nav-item">
+                    <NavLink href="/organizacoes" class="navbar-nav-link rounded" ActiveClass="active" Match="NavLinkMatch.All">
+                        <i class="ph-bank me-2"</i>
+                        Organizações Sociais
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink href="/editais" class="navbar-nav-link rounded" ActiveClass="active" Match="NavLinkMatch.All">
+                        <i class="ph-files me-2"</i>
+                        Editais de Chamamento
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink href="/editais" class="navbar-nav-link rounded" ActiveClass="active" Match="NavLinkMatch.All">
+                        <i class="ph-handshake me-2"</i>
+                        Parcerias
+                    </NavLink>
+                </li>
+
+            </ul>
+        </div>
+        <ul class="nav gap-1 flex-xl-1 justify-content-end order-0 order-xl-1">
+            <DarkModeButton />
+            <ProfileButton />
+        </ul>
+    </div>
+</div>

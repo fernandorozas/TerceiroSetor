@@ -1,0 +1,148 @@
+﻿@using Blazored.Toast.Services
+@using TerceiroSetor.DTOs.OrganizacaoSocial.Commands
+@using TerceiroSetor.DTOs.OrganizacoesSociais
+
+@page "/organizacao-social"
+
+@inject IServiceOrganizacaoSocial service
+@inject IServiceViaCep viaCepService
+@inject NavigationManager navigationManager
+@inject IToastService toastService
+
+<PageHeader Title="Informe os dados da organização social" />
+<div class="card" style="min-height:350px;">
+    <DomainErrorsSummary Erros="@Erros" />
+    <div class="card-body py-0">
+        <FormWizard HandleSubmit="@HandleSubmit">
+            <FormStep Name="Identificação" Model="@Model.Identificacao">
+                <div class="row">
+                    <WizardImputContainer Label="Nome da Organização Social" TamanhoColuna="6">
+                        <InputText class="form-control" @bind-Value="@Model.Identificacao.Nome" />
+                        <ValidationMessage For="@(() => Model.Identificacao.Nome)" />
+                    </WizardImputContainer>
+
+                   <WizardImputContainer Label="Tipo de Organização Social" TamanhoColuna="6">
+                        <InputSelect class="form-control form-select" @bind-Value="@Model.Identificacao.TipoOrganizacaoSocial">
+                            <EnumOptions TEnum="@TipoOrganizacaoSocialDTO" />
+                        </InputSelect>
+                        <ValidationMessage For="@(() => Model.Identificacao.TipoOrganizacaoSocial)" />
+                    </WizardImputContainer>
+                </div>
+
+                <div class="row">
+                    <WizardImputContainer Label="Data de Consituição" TamanhoColuna="4">
+                        <InputDate class="form-control" @bind-Value="@Model.Identificacao.DataConstituicao" />
+                        <ValidationMessage For="@(() => Model.Identificacao.DataConstituicao)" />
+                    </WizardImputContainer>
+                    <WizardImputContainer Label="Telefone" TamanhoColuna="4">
+                        <InputText class="form-control" @bind-Value="@Model.Identificacao.Telefone" placeholder="Com código de área, somente nº" />
+                        <ValidationMessage For="@(() => Model.Identificacao.Telefone)" />
+                    </WizardImputContainer>
+                    <WizardImputContainer Label="CNPJ" TamanhoColuna="4">
+                        <InputText class="form-control" @bind-Value="@Model.Identificacao.Cnpj" placeholder="Somente nº" />
+                        <ValidationMessage For="@(() => Model.Identificacao.Cnpj)" />
+                    </WizardImputContainer>
+                  
+                </div>
+                <div class="row">
+                    <WizardImputContainer Label="Artigo de Referência" TamanhoColuna="2">
+                        <InputText class="form-control" @bind-Value="@Model.Identificacao.ArtigoReferencia" />
+                        <ValidationMessage For="@(() => Model.Identificacao.ArtigoReferencia)" />
+                    </WizardImputContainer>
+
+                    <WizardImputContainer Label="Finalidade" TamanhoColuna="10">
+                        <InputSelect class="form-control form-select" @bind-Value="@Model.Identificacao.Finalidade">
+                            <EnumOptions TEnum="@FinalidadeDTO" />
+                        </InputSelect>
+                        <ValidationMessage For="@(() => Model.Identificacao.Finalidade)" />
+                    </WizardImputContainer>
+                </div>
+
+                <WizardImputContainer Label="Resumo da Finalidade">
+                    <InputText class="form-control" @bind-Value="@Model.Identificacao.FinalidadeResumida" />
+                    <ValidationMessage For="@(() => Model.Identificacao.FinalidadeResumida)" />
+                </WizardImputContainer>
+
+            </FormStep>
+            <FormStep Name="Endereço" Model="@Model.Endereco">
+                
+                <div class="row">
+                    <WizardImputContainer Label="CEP" TamanhoColuna="2">
+                        <InputText class="form-control" @bind-Value="@Model.Endereco.Cep" @onblur="@PesquisarCep" />
+                        <ValidationMessage For="@(() => Model.Endereco.Cep)" />
+                    </WizardImputContainer>
+
+                    <WizardImputContainer Label="Logradouro" TamanhoColuna="8">
+                        <InputText class="form-control" @bind-Value="@Model.Endereco.Logradouro" />
+                        <ValidationMessage For="@(() => Model.Endereco.Logradouro)" />
+                    </WizardImputContainer>
+
+                    <WizardImputContainer Label="Número do Imóvel" TamanhoColuna="2">
+                        <InputText class="form-control" @bind-Value="@Model.Endereco.Numero" />
+                        <ValidationMessage For="@(() => Model.Endereco.Numero)" />
+                    </WizardImputContainer>
+                </div>
+
+                <WizardImputContainer Label="Complemento">
+                    <InputText class="form-control" @bind-Value="@Model.Endereco.Complemento" />
+                    <ValidationMessage For="@(() => Model.Endereco.Complemento)" />
+                </WizardImputContainer>
+
+                <div class="row">
+                    <WizardImputContainer Label="Bairro" TamanhoColuna="4">
+                        <InputText class="form-control" @bind-Value="@Model.Endereco.Bairro" />
+                        <ValidationMessage For="@(() => Model.Endereco.Bairro)" />
+                    </WizardImputContainer>
+
+                    <WizardImputContainer Label="Cidade" TamanhoColuna="4">
+                        <InputText class="form-control" @bind-Value="@Model.Endereco.Cidade" />
+                        <ValidationMessage For="@(() => Model.Endereco.Cidade)" />
+                    </WizardImputContainer>
+
+                    <WizardImputContainer Label="Estado" TamanhoColuna="2">
+                        <InputText class="form-control" @bind-Value="@Model.Endereco.Estado" />
+                        <ValidationMessage For="@(() => Model.Endereco.Estado)" />
+                    </WizardImputContainer>
+                </div>
+            </FormStep>
+        </FormWizard>
+    </div>
+</div>
+@code {
+
+    [Parameter]
+    public Guid Id { get; set; }
+
+    private OrganizacaoSocialCommand Model { get; set; } = new OrganizacaoSocialCommand();
+    private List<string> Erros { get; set; } = new List<string>();
+
+    private async Task HandleSubmit()
+    {
+        var response = await service.AddAsync(Model);
+        if (response.Messages.Any())
+        {
+            Erros.Clear();
+            Erros.AddRange(response.Messages);
+            return;
+        }
+
+        toastService.ShowSuccess("Organização Social cadastrada com sucesso!");
+        navigationManager.NavigateTo("/organizacoes");
+    }
+
+    private async Task PesquisarCep()
+    {
+        int cep = 0;
+        int.TryParse(Model.Endereco.Cep, out cep);
+
+        if (Model.Endereco.Cep.Length == 8 && cep > 0)
+        {
+            var enderecoPesquisado = await viaCepService.ObterEndereco(Model.Endereco.Cep);
+            Model.Endereco.Logradouro = enderecoPesquisado.Logradouro;
+            Model.Endereco.Bairro = enderecoPesquisado.Bairro;
+            Model.Endereco.Cidade = enderecoPesquisado.Localidade;
+            Model.Endereco.Estado = enderecoPesquisado.Uf;
+        }
+    }
+
+}

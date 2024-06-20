@@ -1,0 +1,86 @@
+﻿@using Blazored.Modal
+@using Blazored.Modal.Services
+@using TerceiroSetor.DTOs.OrganizacaoSocial.Commands
+@using TerceiroSetor.DTOs.OrganizacoesSociais
+@using TerceiroSetor.DTOs.Shared.Commands
+
+@inject IServiceOrganizacaoSocial service
+
+<DomainErrorsSummary Erros="@Erros" />
+<EditForm Model="@Responsavel" OnValidSubmit="@OnValidSubmit" class="mt-2">
+    
+    <DataAnnotationsValidator />
+
+    <div class="row">
+        <FormInputContainer Label="Nome Responsável" TamanhoColuna="6">
+            <InputText class="form-control" @bind-Value="@Responsavel.NomeCompleto" />
+            <ValidationMessage For="@(() => Responsavel.NomeCompleto)" />
+        </FormInputContainer>
+
+        <FormInputContainer Label="Vínculo Trabalhista" TamanhoColuna="6">
+            <InputSelect class="form-control form-select" @bind-Value="@Responsavel.VinculoTrabalhista">
+                <EnumOptions TEnum="VinculoTrabalhistaDTO" />
+            </InputSelect>
+            <ValidationMessage For="@(() => Responsavel.VinculoTrabalhista)" />
+        </FormInputContainer>
+    </div>
+
+    <div class="row">
+        <FormInputContainer Label="CPF" TamanhoColuna="6">
+            <InputText class="form-control" @bind-Value="@Responsavel.Cpf" placeholder="Somente nº"/>
+            <ValidationMessage For="@(() => Responsavel.Cpf)" />
+        </FormInputContainer>
+
+        <FormInputContainer Label="Data de Início de Vigência" TamanhoColuna="6">
+            <InputDate class="form-control" @bind-Value="@Responsavel.InicioVigencia"/>
+            <ValidationMessage For="@(() => Responsavel.InicioVigencia)" />
+        </FormInputContainer>
+    </div>
+
+    <div class="row">
+        <FormInputContainer Label="E-mail Pessoal" TamanhoColuna="6">
+            <InputText class="form-control" @bind-Value="@Responsavel.EmailPessoal" />
+            <ValidationMessage For="@(() => Responsavel.EmailPessoal)" />
+        </FormInputContainer>
+
+        <FormInputContainer Label="E-mail Institucional" TamanhoColuna="6">
+            <InputText class="form-control" @bind-Value="@Responsavel.EmailInstitucional" />
+            <ValidationMessage For="@(() => Responsavel.EmailInstitucional)" />
+        </FormInputContainer>
+        
+    </div>
+
+    <div class="d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary">
+            Salvar
+            <i class="ph-floppy-disk mx-1"></i>
+        </button>
+    </div>
+
+</EditForm>
+
+@code {
+
+    [CascadingParameter]
+    BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
+    [Parameter]
+    public OrganizacaoSocialDTO OrganizacaoSocial { get; set; }
+
+    public ResponsavelCommand Responsavel { get; set; } = new ResponsavelCommand();
+    private List<string> Erros { get; set; } = new List<string>();
+
+    private async Task OnValidSubmit()
+    {
+        Responsavel.OrganizacaoSocialId = OrganizacaoSocial.Id;
+        var response = await service.InformarResponsavelAsync(Responsavel);
+
+        if (response.Messages.Any())
+        {
+            Erros = response.Messages;
+            return;
+        }
+        await BlazoredModal.CloseAsync(ModalResult.Ok());
+    }
+
+}

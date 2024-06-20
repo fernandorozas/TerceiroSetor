@@ -1,0 +1,95 @@
+﻿@using TerceiroSetor.DTOs.OrganizacoesSociais
+@inject IServiceOrganizacaoSocial service
+
+@page "/organizacoes"
+
+<PageHeader Title="Organizações Sociais Parceiras" />
+
+@if (OrganizacoesSociais is null)
+{
+    <p>Aguarde.....</p>
+}
+else
+{
+    <div class="mb-3">
+        <NavLink class="btn btn-primary" href="/organizacao-social">
+            <i class="ph-plus-circle me-1"></i>
+            Cadastrar Organização Social
+        </NavLink>
+    </div>
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-end">
+            <div class="col-5">
+
+                <div class="input-group">
+                    <input class="form-control" type="search" autofocus @bind="termoPesquisa" @bind:event="oninput" placeholder="Digite para pesquisar ..." />
+                    <span class="input-group-text">
+                        <i class="ph-magnifying-glass"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <QuickGrid Items="@OrganizacoesSociaisFiltradas" class="table" Pagination="@pagination">
+                <PropertyColumn Property="@(p => p.Nome)" Sortable="true" Title="Nome da Organização Social"
+                                InitialSortDirection="SortDirection.Ascending" Class="col-5" />
+
+                <PropertyColumn Property="@(p => StringHelper.FormatPhoneNumber(p.Telefone))" Align="Align.Center" Title="Telefone" Class="col-2"/>
+                <PropertyColumn Property="@(p => StringHelper.FormatCNPJ(p.Cnpj))" Align="Align.Center" Title="CNPJ" Class="col-2" />
+                <PropertyColumn Property="@(p => p.TipoOrganizacaoSocial)" Title="Tipo" Class="col-1" />
+
+                <TemplateColumn Title="Ações" Align="Align.Center" Class="col-2">
+                    <NavLink href=@("/informar-conselhos/" + context.Id) 
+                        class="btn btn-sm btn-outline-danger btn-icon rounded-pill" title="Informar Conselhos">
+                        <i class="ph-users-three"></i>
+                    </NavLink>
+
+                    <NavLink href=@("/informar-responsaveis/" + context.Id)
+                             class="btn btn-sm btn-outline-primary btn-icon rounded-pill" title="Informar Responsáveis">
+                        <i class="ph-users-four"></i>
+                    </NavLink>
+
+                    <button class="btn btn-sm btn-outline-warning btn-icon rounded-pill" title="Editar Identificação" >
+                        <i class="ph-info"></i>
+                    </button>
+
+                    <button class="btn btn-sm btn-outline-secondary btn-icon rounded-pill" title="Editar Endereço">
+                        <i class="ph-door"></i>
+                    </button>
+                </TemplateColumn>
+
+            </QuickGrid>
+            <div class="mx-3">
+                <Paginator State="@pagination" />
+
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@code {
+
+    public IQueryable<OrganizacaoSocialDTO> OrganizacoesSociais { get; set; } = null!;
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+    private string termoPesquisa = string.Empty;
+
+    IQueryable<OrganizacaoSocialDTO> OrganizacoesSociaisFiltradas
+    {
+        get
+        {
+            var result = OrganizacoesSociais?.
+            Where(x => x.Nome.ToLower().Contains(termoPesquisa.ToLower())
+            || x.Cnpj.ToLower().Contains(termoPesquisa.ToLower()));
+            return result;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var lista = await service.GetAllAsync();
+        OrganizacoesSociais = lista.AsQueryable().OrderBy(os => os.Nome);
+    }
+}

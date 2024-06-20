@@ -1,0 +1,82 @@
+﻿@page "/informar-responsaveis/{id:guid}"
+
+@using Blazored.Modal
+@using Blazored.Modal.Services
+@using TerceiroSetor.DTOs.OrganizacoesSociais
+
+@inject IServiceOrganizacaoSocial service
+
+<PageHeader Title="Organizações Sociais - Responsáveis" />
+
+<div class="mb-3">
+    <button class="btn btn-primary" @onclick="(() => AbrirFormularioResponsavel())">
+        <i class="ph-plus-circle me-1"></i>
+        Cadastrar Responsável
+    </button>
+
+    <NavLink class="btn btn-secondary" href="/organizacoes">
+        <i class="ph-arrow-circle-left me-1"></i>
+        Voltar
+    </NavLink>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <QuickGrid Items="@Responsaveis" class="table table-striped">
+
+            <PropertyColumn Property="@(p => p.NomeCompleto)" Sortable="true" Title="Nome Responsavel" InitialSortDirection="SortDirection.Ascending" />
+            <PropertyColumn Property="@(p => p.VinculoTrabalhista)" Sortable="true" Title="Tipo Responsável" />
+            <PropertyColumn Property="@(p => p.Cpf)" Align="Align.Center" />
+            <PropertyColumn Property="@(p => p.InicioVigencia)" Sortable="true" Align="Align.Center" Title="Data Início Vigência" Format="dd-MM-yyyy" />
+            <PropertyColumn Property="@(p => p.FinalVigencia)" Sortable="true" Align="Align.Center" Title="Data Fim Vigência" Format="dd-MM-yyyy" />
+
+            <TemplateColumn Title="Ações" Align="Align.Center">
+                <button class="btn btn-outline-primary btn-icon rounded-pill" title="Encerrar Vigencia">
+                    <i class="ph-calendar"></i>
+                </button>
+            </TemplateColumn>
+        </QuickGrid>
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public Guid Id { get; set; }
+
+    [CascadingParameter]
+    public IModalService Modal { get; set; } = default!;
+
+    public IQueryable<ResponsavelDTO> Responsaveis { get; set; } = null;
+    public OrganizacaoSocialDTO OrganizacaoSocial { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await AtualizarResponsaveis();
+    }
+
+    private async Task AtualizarResponsaveis()
+    {
+        OrganizacaoSocial = await service.GetByIdAsync(Id);
+        Responsaveis = OrganizacaoSocial.Responsaveis.AsQueryable();
+    }
+
+    private async Task AbrirFormularioResponsavel()
+    {
+
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(OrganizacaoResponsavel.OrganizacaoSocial), OrganizacaoSocial);
+       
+        var responsavelForm = Modal.Show<OrganizacaoResponsavel>("Responsável",
+                                parameters, new ModalOptions() { Size = ModalSize.Large });
+
+        var result = await responsavelForm.Result;
+
+        if (result.Confirmed)
+            await AtualizarResponsaveis();
+
+    }
+
+
+}

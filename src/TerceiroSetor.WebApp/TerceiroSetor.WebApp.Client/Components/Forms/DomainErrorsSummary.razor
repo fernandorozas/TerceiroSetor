@@ -1,0 +1,35 @@
+﻿@if (Erros.Count() > 0)
+{
+    <div class="card-header p-0 m-0">
+        <div class="mb-0 alert alert-danger border-0 alert-dismissible fade @(ShowMessage ? "show" : "hide")">
+            <h6>Verifique o(s) erro(s) abaixo</h6>
+            <ul>
+                @foreach (var erro in Erros)
+                {
+                    <li>@erro</li>
+                }
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" @onclick="CloseButton"></button>
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public List<string> Erros { get; set; } = new List<string>();
+
+    public bool ShowMessage { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        ShowMessage = Erros.Count > 0;
+    }
+
+    public void CloseButton()
+    {
+        Erros = new List<string>();
+        ShowMessage = false;
+    }
+
+}

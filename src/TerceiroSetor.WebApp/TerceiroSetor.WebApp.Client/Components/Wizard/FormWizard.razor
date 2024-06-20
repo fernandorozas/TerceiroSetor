@@ -1,0 +1,96 @@
+﻿@inherits ComponentBase
+
+<CascadingValue Value="this">
+    <div id="@Id" class="wizard-form steps-basic wizard">
+        <div class="steps">
+            <ul>
+                @foreach (var step in Steps)
+                {
+                    <li id="step-@(StepsIndex(step) + 1)" class="@(ActiveStep == step ? "current" : step.Complete ? "done" : "disabled" )">
+                        <a class="@(step.Complete ? "cursor-pointer" : "cursor-not-allowed")" @onclick="@(() => GoDirect(step))">
+                            <span class="number">@(StepsIndex(step) + 1)</span> @step.Name
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div id="container-fluid">
+            @ChildContent
+        </div>
+    </div>
+
+</CascadingValue>
+
+@code {
+    protected internal List<FormStep> Steps = new List<FormStep>();
+
+    [Parameter]
+    public string Id { get; set; } = string.Empty;
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = null!;
+
+    [Parameter]
+    public FormStep ActiveStep { get; set; } = null!;
+
+    [Parameter]
+    public int ActiveStepIx { get; set; }
+
+    public bool IsLastStep { get; set; }
+
+    [Parameter]
+    public EventCallback HandleSubmit { get; set; }
+
+    protected internal void GoBack()
+    {
+        if (ActiveStepIx > 0)
+        {
+
+            SetActive(Steps[ActiveStepIx - 1]);
+        }
+    }
+
+    protected internal async Task GoNext()
+    {
+        if (ActiveStepIx < Steps.Count - 1)
+        {
+            ActiveStep.Complete = true;
+            SetActive(Steps[ActiveStepIx + 1]);
+        }
+        else
+            await HandleSubmit.InvokeAsync();
+    }
+
+    protected internal void SetActive(FormStep step)
+    {
+        ActiveStep = step ?? throw new ArgumentNullException(nameof(step));
+        ActiveStepIx = StepsIndex(step);
+        IsLastStep = ActiveStepIx == Steps.Count - 1;
+        StateHasChanged();
+    }
+
+    protected internal int StepsIndex(FormStep step) => Steps.IndexOf(step);
+
+    protected internal void AddStep(FormStep step)
+    {
+        Steps.Add(step);
+        StateHasChanged();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            SetActive(Steps[0]);
+            StateHasChanged();
+        }
+    }
+
+    protected internal void GoDirect(FormStep step)
+    {
+        if (step.Complete)
+            SetActive(step);
+        else
+            return;
+    }
+}

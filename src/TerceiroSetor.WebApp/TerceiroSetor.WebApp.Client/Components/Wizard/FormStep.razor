@@ -1,0 +1,62 @@
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using System.ComponentModel.DataAnnotations
+
+@inherits ComponentBase
+
+@if (Parent.ActiveStep == this)
+{
+    <div id="step-@(Parent.StepsIndex(this) + 1)">
+        <EditForm Model="@Model" OnValidSubmit="@OnValidSubmit">
+            <DataAnnotationsValidator />
+            <div>
+                @ChildContent
+            </div>
+            <div class="d-flex justify-content-end p-2">
+                <button class="btn btn-primary me-2" type="button" @onclick="@GoBack" disabled="@DisabledButton">
+                    Anterior
+                </button>
+
+                <button class="btn btn-primary" type="submit">
+                    @ButtonName
+                </button>
+            </div>
+        </EditForm>
+    </div>
+}
+
+@code {
+    [CascadingParameter]
+    protected internal FormWizard Parent { get; set; } = null!;
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = null!;
+
+    [Parameter]
+    public object Model { get; set; } = null!;
+
+    [Parameter]
+    public string Name { get; set; } = string.Empty;
+
+    public string ButtonName { get; set; } = string.Empty;
+    
+    public bool DisabledButton { get; set; }
+    
+    public bool Complete { get; set; }
+
+
+
+
+
+    protected override void OnInitialized() => Parent.AddStep(this);
+
+    public async Task OnValidSubmit() => await Parent.GoNext();
+
+    public void GoBack() => Parent.GoBack();
+
+    protected override void OnParametersSet()
+    {
+        ButtonName = Parent.IsLastStep ? "Salvar" : "Próximo";
+        DisabledButton = Parent.ActiveStepIx == 0 ? true : false;
+    }
+
+}
