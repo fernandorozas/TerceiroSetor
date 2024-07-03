@@ -1,4 +1,6 @@
-﻿namespace TerceiroSetor.Domain.Entities.Shared
+﻿using FluentValidation;
+
+namespace TerceiroSetor.Domain.Entities.Shared
 {
     public class Banco : EntidadeFixa
     {
@@ -10,4 +12,16 @@
         }
         public string Descricao { get; private set; }
     }
+
+    public class ValidatorBancoValido : AbstractValidator<Banco>
+    {
+        public ValidatorBancoValido()
+        {
+            RuleFor(x => x.Descricao)
+                 .NotEmpty().WithMessage("O campo Descricao precisa ser fornecido");
+
+        }
+    }
+
+
 }

@@ -1,4 +1,5 @@
-﻿using TerceiroSetor.DTOs.Attributes;
+﻿using TerceiroSetor.Domain.ValueObjects;
+using TerceiroSetor.DTOs.Attributes;
 using TerceiroSetor.DTOs.Shared;
 
 namespace TerceiroSetor.DTOs.OrganizacoesSociais

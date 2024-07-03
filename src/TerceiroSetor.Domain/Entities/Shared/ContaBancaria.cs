@@ -1,4 +1,7 @@
-﻿namespace TerceiroSetor.Domain.Entities.Shared
+﻿using FluentValidation;
+using TerceiroSetor.Domain.Entities.OrganizacoesSociais;
+
+namespace TerceiroSetor.Domain.Entities.Shared
 {
     public class ContaBancaria
     {
@@ -16,5 +19,22 @@
         public string Agencia { get; private set; }
         public string ContaCorrente { get; private set; }
         public TipoConta TipoConta { get; private set; }
+
     }
+
+    public class ValidatorContaBancariaValido : AbstractValidator<ContaBancaria>
+    {
+        public ValidatorContaBancariaValido()
+        {
+            RuleFor(x => x.Agencia)
+                 .NotEmpty().WithMessage("O campo Agencia precisa ser fornecido");
+            
+            RuleFor(x => x.ContaCorrente)
+                 .NotEmpty().WithMessage("O campo Conta Corrente precisa ser fornecido");
+
+            RuleFor(x => x.Banco).SetValidator(new ValidatorBancoValido());
+
+        }
+    }
+
 }

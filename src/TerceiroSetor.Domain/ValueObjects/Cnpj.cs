@@ -2,6 +2,13 @@
 {
     public class Cnpj
     {
+        public Cnpj(string numeroCnpj)
+        {
+            NumeroCnpj = numeroCnpj;
+        }
+
+        public string NumeroCnpj { get; }
+
         public static bool ValidarCnpj(string cnpj)
         {
             var multiplicador1 = new int[12] { 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
