@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using System.ComponentModel.DataAnnotations.Schema;
 using TerceiroSetor.Domain.ValueObjects;
 
 namespace TerceiroSetor.Domain.Entities.OrganizacoesSociais
@@ -42,6 +43,7 @@ namespace TerceiroSetor.Domain.Entities.OrganizacoesSociais
         public DateTime FinalVigencia { get; private set; }
         public Guid UsuarioId { get; private set; }
 
+        [NotMapped]
         public ValidationResult ValidationResult { get; private set; }
         public bool IsValid()
         {
