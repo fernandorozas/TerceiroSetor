@@ -109,7 +109,7 @@ namespace TerceiroSetor.Domain.Entities.OrganizacoesSociais
                 .Length(5, 250).WithMessage("O campo NomeCompleto precisa ter entre 5 e 250 caracteres");
 
             RuleFor(x => x.ArtigoReferencia)
-                .Length(5, 100).WithMessage("O campo ArtigoReferencia precisa ter entre 5 e 100 caracteres");
+                .Length(2, 100).WithMessage("O campo ArtigoReferencia precisa ter entre 5 e 100 caracteres");
 
             RuleFor(x => x.FinalidadeResumida)
                 .NotEmpty().WithMessage("O campo Finalidade Resumida precisa ser fornecido")

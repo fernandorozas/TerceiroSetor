@@ -17,4 +17,16 @@ namespace TerceiroSetor.Data.OrmConfiguration
             builder.ToContainer("OrganizacoesSociais");
         }
     }
+
+    /*
+    public class ResponsavelConfig : IEntityTypeConfiguration<Responsavel>
+    {
+        public void Configure(EntityTypeBuilder<Responsavel> builder)
+        {
+            builder.Ignore(x => x.ValidationResult);
+            builder.ToContainer("Responsavel");
+            
+        }
+    }
+    */
 }

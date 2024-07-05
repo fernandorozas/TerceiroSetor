@@ -1,0 +1,68 @@
+﻿@using Blazored.Modal
+@using Blazored.Modal.Services
+@using TerceiroSetor.DTOs.OrganizacaoSocial.Commands
+@using TerceiroSetor.DTOs.OrganizacoesSociais
+@using TerceiroSetor.DTOs.Shared.Commands
+
+@inject IServiceOrganizacaoSocial service
+
+<DomainErrorsSummary Erros="@Erros" />
+<EditForm Model="@Conselho" OnValidSubmit="@OnValidSubmit" class="mt-2">
+
+    <DataAnnotationsValidator />
+
+    <div class="row">
+        <FormInputContainer Label="Tipo Conselho" TamanhoColuna="6">
+            <InputSelect class="form-control form-select" @bind-Value="@Conselho.TipoConselho">
+                <EnumOptions TEnum="TipoConselhoDTO" />
+            </InputSelect>
+            <ValidationMessage For="@(() => Conselho.TipoConselho)" />
+        </FormInputContainer>
+    </div>
+
+    <div class="row">
+        <FormInputContainer Label="Data de Início de Vigência" TamanhoColuna="6">
+            <InputDate class="form-control" @bind-Value="@Conselho.InicioVigencia" />
+            <ValidationMessage For="@(() => Conselho.InicioVigencia)" />
+        </FormInputContainer>
+        
+        <FormInputContainer Label="Data de fim de Vigência" TamanhoColuna="6">
+            <InputDate class="form-control" @bind-Value="@Conselho.FinalVigencia" />
+            <ValidationMessage For="@(() => Conselho.InicioVigencia)" />
+        </FormInputContainer>
+    </div>
+
+    <div class="d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary">
+            Salvar
+            <i class="ph-floppy-disk mx-1"></i>
+        </button>
+    </div>
+
+</EditForm>
+
+@code {
+
+    [CascadingParameter]
+    BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
+    [Parameter]
+    public OrganizacaoSocialDTO OrganizacaoSocial { get; set; }
+
+    public ConselhoCommand Conselho { get; set; } = new ConselhoCommand();
+    private List<string> Erros { get; set; } = new List<string>();
+
+    private async Task OnValidSubmit()
+    {
+        Conselho.OrganizacaoSocialId = OrganizacaoSocial.Id;
+        var response = await service.InformarConselhoAsync(Conselho);
+
+        if (response.Messages.Any())
+        {
+            Erros = response.Messages;
+            return;
+        }
+        await BlazoredModal.CloseAsync(ModalResult.Ok());
+    }
+
+}

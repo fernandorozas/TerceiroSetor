@@ -13,6 +13,8 @@ namespace TerceiroSetor.WebApp.Client.Services
         Task<OrganizacaoSocialDTO> GetByIdAsync(Guid id);
         Task<ResponseResult> AddAsync(OrganizacaoSocialCommand command);
         Task<ResponseResult> InformarResponsavelAsync(ResponsavelCommand command);
+        Task<ResponseResult> InformarConselhoAsync(ConselhoCommand command);
+
     }
 
     public class ServiceOrganizacaoSocial : ServiceBase, IServiceOrganizacaoSocial
@@ -60,6 +62,16 @@ namespace TerceiroSetor.WebApp.Client.Services
         {
             var content = GetContent(command);
             var response = await _httpClient.PutAsync("/api/organizacao-social/informar-responsavel", content);
+
+            if (!HandleErrors(response)) return await GetJsonResponse<ResponseResult>(response);
+
+            return ResponseOK();
+        }
+
+        public async Task<ResponseResult>InformarConselhoAsync(ConselhoCommand command)
+        {
+            var content = GetContent(command);
+            var response = await _httpClient.PutAsync("/api/organizacao-social/informar-conselho", content);
 
             if (!HandleErrors(response)) return await GetJsonResponse<ResponseResult>(response);
 
