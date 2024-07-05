@@ -42,6 +42,8 @@ namespace TerceiroSetor.Domain.Entities.OrganizacoesSociais
         public DateTime FinalVigencia { get; private set; }
         public Guid UsuarioId { get; private set; }
 
+        public void EncerrarVigencia(DateTime dataEncerramento) => FinalVigencia = dataEncerramento;
+
         [NotMapped]
         public ValidationResult ValidationResult { get; private set; }
         public bool IsValid()

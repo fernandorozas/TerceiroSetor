@@ -35,7 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TerceiroSetor.WebApp", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TerceiroSetor.WebApp.Client", "src\TerceiroSetor.WebApp\TerceiroSetor.WebApp.Client\TerceiroSetor.WebApp.Client.csproj", "{567E5334-87BA-4F61-939D-5EB0FB6E4E56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{16DCAC39-DB53-4F92-BE66-7B8A85AE8BAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{16DCAC39-DB53-4F92-BE66-7B8A85AE8BAC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

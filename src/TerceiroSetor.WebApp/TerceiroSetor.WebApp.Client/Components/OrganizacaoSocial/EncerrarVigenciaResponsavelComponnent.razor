@@ -1,0 +1,55 @@
+﻿@using Blazored.Modal
+@using Blazored.Modal.Services
+@using TerceiroSetor.DTOs.OrganizacaoSocial.Commands
+@using TerceiroSetor.DTOs.OrganizacoesSociais
+
+@inject IServiceOrganizacaoSocial service
+
+<DomainErrorsSummary Erros="@Erros" />
+
+<EditForm Model="@Model" OnValidSubmit="@OnValidSubmit" class="mt-2">
+
+    <FormInputContainer Label="Data de Encerramento de Vigência">
+        <InputDate class="form-control" @bind-Value="@Model.DataEncerramento" />
+        <ValidationMessage For="@(() => Model.DataEncerramento)" />
+    </FormInputContainer>
+
+    <button type="submit" class="btn btn-primary">
+        Encerrar Vigência
+    </button>
+
+</EditForm>
+
+@code {
+
+    [CascadingParameter]
+    BlazoredModalInstance BlazoredModal { get; set; } = default!;
+    [Parameter]
+    public OrganizacaoSocialDTO OrganizacaoSocial { get; set; }
+    [Parameter]
+    public VinculoTrabalhistaDTO VinculoTrabalhista { get; set; }
+
+
+    public EncerrarVigenciaResponsavelCommand Model { get; set; } = new EncerrarVigenciaResponsavelCommand();
+    private List<string> Erros { get; set; } = new List<string>();
+
+    protected override void OnParametersSet()
+    {
+        Model.OrganizacaoSocialId = OrganizacaoSocial.Id;
+        Model.VinculoTrabalhista = VinculoTrabalhista;
+    }
+
+
+    private async Task OnValidSubmit()
+    {
+        var response = await service.EncerrarVigenciaResponsavel(Model);
+
+        if (response.Messages.Any())
+        {
+            Erros = response.Messages;
+            return;
+        }
+        await BlazoredModal.CloseAsync(ModalResult.Ok());
+    }
+
+}

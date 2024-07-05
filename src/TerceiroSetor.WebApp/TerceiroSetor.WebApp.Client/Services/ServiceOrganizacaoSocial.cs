@@ -15,6 +15,7 @@ namespace TerceiroSetor.WebApp.Client.Services
         Task<ResponseResult> InformarResponsavelAsync(ResponsavelCommand command);
         Task<ResponseResult> InformarConselhoAsync(ConselhoCommand command);
         Task<ResponseResult> EncerrarVigenciaConselho(EncerrarVigenciaConselhoCommand command);
+        Task<ResponseResult> EncerrarVigenciaResponsavel(EncerrarVigenciaResponsavelCommand command);
 
     }
 
@@ -88,5 +89,16 @@ namespace TerceiroSetor.WebApp.Client.Services
 
             return ResponseOK();
         }
+
+        public async Task<ResponseResult> EncerrarVigenciaResponsavel(EncerrarVigenciaResponsavelCommand command)
+        {
+            var content = GetContent(command);
+            var response = await _httpClient.PutAsync("/api/organizacao-social/encerrar-vigencia-responsavel", content);
+
+            if (!HandleErrors(response)) return await GetJsonResponse<ResponseResult>(response);
+
+            return ResponseOK();
+        }
+
     }
 }
