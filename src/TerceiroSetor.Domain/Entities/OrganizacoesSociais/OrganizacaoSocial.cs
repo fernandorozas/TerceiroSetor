@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
-using System.Runtime.ConstrainedExecution;
 using TerceiroSetor.Domain.Entities.Shared;
 using TerceiroSetor.Domain.ValueObjects;
 

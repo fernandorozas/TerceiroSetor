@@ -26,8 +26,9 @@
             <PropertyColumn Property="@(p => p.InicioVigencia)" Sortable="true" Align="Align.Center" Title="Data Início Vigência" Format="dd-MM-yyyy" />
             <PropertyColumn Property="@(p => p.FinalVigencia)" Sortable="true" Align="Align.Center" Title="Data Fim Vigência" Format="dd-MM-yyyy" />
             <TemplateColumn Title="Ações" Align="Align.Center">
-                <button class="btn btn-outline-primary btn-icon rounded-pill" title="Encerrar Vigencia">
-                    <i class="ph-calendar"></i>
+                <button class="btn btn-outline-primary btn-icon rounded-pill" @onclick="(() => AbrirFormularioEncerrarVigencia(context.TipoConselho))" title="Encerrar Vigencia">
+                    <i class=" ph-calendar">
+                    </i>
                 </button>
             </TemplateColumn>
         </QuickGrid>
@@ -65,7 +66,24 @@
         parameters.Add(nameof(OrganizacaoConselho.OrganizacaoSocial), OrganizacaoSocial);
 
         var responsavelForm = Modal.Show<OrganizacaoConselho>("Conselho",
-                                parameters, new ModalOptions() { Size = ModalSize.Large });
+                            parameters, new ModalOptions() { Size = ModalSize.Large });
+
+        var result = await responsavelForm.Result;
+
+        if (result.Confirmed)
+            await AtualizarConselhos();
+
+    }
+
+    private async Task AbrirFormularioEncerrarVigencia(TipoConselhoDTO tipoConselhoDTO)
+    {
+
+        var parameters = new ModalParameters();
+        parameters.Add(nameof(EncerrarVigenciaConselhoComponent.OrganizacaoSocial), OrganizacaoSocial);
+        parameters.Add(nameof(EncerrarVigenciaConselhoComponent.TipoConselho), tipoConselhoDTO);
+
+        var responsavelForm = Modal.Show<EncerrarVigenciaConselhoComponent>("Encerrar Vigência",
+                        parameters, new ModalOptions() { Size = ModalSize.Large });
 
         var result = await responsavelForm.Result;
 

@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using TerceiroSetor.Domain.ValueObjects;
 
 namespace TerceiroSetor.Domain.Entities.OrganizacoesSociais
 {
@@ -19,6 +18,8 @@ namespace TerceiroSetor.Domain.Entities.OrganizacoesSociais
         public DateTime InicioVigencia { get; private set; }
         public DateTime FinalVigencia { get; private set; }
         public ICollection<ConselhoMembro> Membros { get; private set; }
+        public void EncerrarVigencia(DateTime dataEncerramento) => FinalVigencia = dataEncerramento;
+        
     }
 
     public class ValidatorConselhoValido : AbstractValidator<Conselho>
@@ -26,13 +27,9 @@ namespace TerceiroSetor.Domain.Entities.OrganizacoesSociais
         public ValidatorConselhoValido()
         {
             RuleFor(x => x.InicioVigencia)
-                 .NotEmpty().WithMessage("O campo InicioVigencia precisa ser fornecido");
-
-            RuleFor(x => x.FinalVigencia)
-                .NotEmpty().WithMessage("O campo FinalVigencia precisa ser fornecido")
-                .GreaterThan(x => x.InicioVigencia).WithMessage("A data de fim de vigência deve ser maior que a data de início.");
-
-            RuleForEach(x => x.Membros).SetValidator(new ValidatorConselhoMembroValido());
+                 .NotEmpty()
+                 .GreaterThanOrEqualTo(new DateTime(2024,01,01))
+                 .WithMessage("Data de inicio de vigência deve ser maior que a data de instituição da entidade");
         }
     }
 

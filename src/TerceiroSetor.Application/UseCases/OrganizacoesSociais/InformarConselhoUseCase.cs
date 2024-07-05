@@ -24,10 +24,12 @@ namespace TerceiroSetor.Application.UseCases.OrganizacoesSociais
         public async Task Handle(ConselhoCommand viewModel, CancellationToken cancellationToken)
         {
             var novoConselho = _mapper.Map<Conselho>(viewModel);
+            var validacoesConselho = new ValidatorConselhoValido().Validate(novoConselho);
+
             var organizacaoSocial = await _repositoryOrganizacaoSocial.GetByIdAsync(viewModel.OrganizacaoSocialId);
-            if (!organizacaoSocial.IsValid())
+            if (!validacoesConselho.IsValid)
             {
-                _notificator.AddNotifications(organizacaoSocial.ValidationResult);
+                _notificator.AddNotifications(validacoesConselho);
                 return;
             }
 
@@ -36,7 +38,7 @@ namespace TerceiroSetor.Application.UseCases.OrganizacoesSociais
                 _notificator.AddNotification("Já existe um conselho deste tipo informado!");
                 return;
             }
-
+            
             organizacaoSocial.InformarConselho(novoConselho);
             await _repositoryOrganizacaoSocial.UpdateAsync(organizacaoSocial);
         }

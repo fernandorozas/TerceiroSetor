@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using System.ComponentModel.DataAnnotations.Schema;
-using TerceiroSetor.Domain.ValueObjects;
 
 namespace TerceiroSetor.Domain.Entities.OrganizacoesSociais
 {

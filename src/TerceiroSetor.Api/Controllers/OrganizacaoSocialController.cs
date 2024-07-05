@@ -59,5 +59,14 @@ namespace TerceiroSetor.Api.Controllers
 
             return CustomResponse();
         }
+
+        [HttpPut("encerrar-vigencia")]
+        public async Task<IActionResult> EncerrarVigencia(EncerrarVigenciaConselhoCommand viewModel)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            await _mediator.Send(viewModel);
+
+            return CustomResponse();
+        }
     }
 }
