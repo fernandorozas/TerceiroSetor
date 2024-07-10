@@ -1,7 +1,9 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using System.Runtime.ConstrainedExecution;
 using TerceiroSetor.Domain.Entities.Shared;
 using TerceiroSetor.Domain.ValueObjects;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TerceiroSetor.Domain.Entities.OrganizacoesSociais
 {
@@ -86,6 +88,14 @@ namespace TerceiroSetor.Domain.Entities.OrganizacoesSociais
         }
         public void InformarConselho(Conselho conselho) => Conselhos.Add(conselho);
         public void InformarResponsavel(Responsavel responsavel) => Responsaveis.Add(responsavel);
+
+        public void AlterarStatus(bool ativo, DateTime dataAtualizacao)
+        {
+            Ativo = ativo;
+            DataAtualizacao = dataAtualizacao; 
+        }
+
+
     }
     public class ValidatorOrganizacoesSociaisValido : AbstractValidator<OrganizacaoSocial>
     {

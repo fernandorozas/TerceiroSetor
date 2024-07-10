@@ -5,6 +5,13 @@
 
 <PageHeader Title="Organizações Sociais Parceiras" />
 
+<style>
+    .text-muted {
+        color: #6c757d; /* Cor que indica inatividade */
+        font-style: italic; /* Opcional */
+    }
+</style>
+
 @if (OrganizacoesSociais is null)
 {
     <p>Aguarde.....</p>
@@ -21,7 +28,6 @@ else
     <div class="card">
         <div class="card-header d-flex justify-content-end">
             <div class="col-5">
-
                 <div class="input-group">
                     <input class="form-control" type="search" autofocus @bind="termoPesquisa" @bind:event="oninput" placeholder="Digite para pesquisar ..." />
                     <span class="input-group-text">
@@ -31,47 +37,44 @@ else
             </div>
         </div>
         <div class="table-responsive">
-            <QuickGrid Items="@OrganizacoesSociaisFiltradas" class="table" Pagination="@pagination">
+            <QuickGrid Items="@OrganizacoesSociaisFiltradas" class="table" Pagination="@pagination" RowClassSelector="GetRowClass">
                 <PropertyColumn Property="@(p => p.Nome)" Sortable="true" Title="Nome da Organização Social"
                                 InitialSortDirection="SortDirection.Ascending" Class="col-5" />
-
-                <PropertyColumn Property="@(p => StringHelper.FormatPhoneNumber(p.Telefone))" Align="Align.Center" Title="Telefone" Class="col-2"/>
+                <PropertyColumn Property="@(p => StringHelper.FormatPhoneNumber(p.Telefone))" Align="Align.Center" Title="Telefone" Class="col-2" />
                 <PropertyColumn Property="@(p => StringHelper.FormatCNPJ(p.Cnpj))" Align="Align.Center" Title="CNPJ" Class="col-2" />
+                <PropertyColumn Property="@(p => StringHelper.FormatStatus(p.ativo))" Align="Align.Center" Title="Status" Class="col-2" />
                 <PropertyColumn Property="@(p => p.TipoOrganizacaoSocial)" Title="Tipo" Class="col-1" />
-
                 <TemplateColumn Title="Ações" Align="Align.Center" Class="col-2">
-                    <NavLink href=@("/informar-conselhos/" + context.Id) 
-                        class="btn btn-sm btn-outline-danger btn-icon rounded-pill" title="Informar Conselhos">
-                        <i class="ph-users-three"></i>
-                    </NavLink>
-
-                    <NavLink href=@("/informar-responsaveis/" + context.Id)
-                             class="btn btn-sm btn-outline-primary btn-icon rounded-pill" title="Informar Responsáveis">
-                        <i class="ph-users-four"></i>
-                    </NavLink>
-
-                    <button class="btn btn-sm btn-outline-warning btn-icon rounded-pill" title="Editar Identificação" >
-                        <i class="ph-info"></i>
-                    </button>
-
-                    <button class="btn btn-sm btn-outline-secondary btn-icon rounded-pill" title="Editar Endereço">
-                        <i class="ph-door"></i>
-                    </button>
+                    <div class="d-flex flex-nowrap">
+                        <NavLink href=@("/informar-conselhos/" + context.Id)
+                                 class="btn btn-sm btn-outline-danger btn-icon rounded-pill me-1" title="Informar Conselhos">
+                            <i class="ph-users-three"></i>
+                        </NavLink>
+                        <NavLink href=@("/informar-responsaveis/" + context.Id)
+                                 class="btn btn-sm btn-outline-primary btn-icon rounded-pill me-1" title="Informar Responsáveis">
+                            <i class="ph-users-four"></i>
+                        </NavLink>
+                        <button class="btn btn-sm btn-outline-warning btn-icon rounded-pill me-1" title="Editar Identificação">
+                            <i class="ph-info"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary btn-icon rounded-pill me-1" title="Editar Endereço">
+                            <i class="ph-door"></i>
+                        </button>
+                        <NavLink href=@("/desativar-organizacao-social/" + context.Id)
+                                 class="btn btn-sm btn-danger btn-icon rounded-pill" title="Desativar Organização Social">
+                            <i class="ph-users-four"></i>
+                        </NavLink>
+                    </div>
                 </TemplateColumn>
-
             </QuickGrid>
             <div class="mx-3">
                 <Paginator State="@pagination" />
-
             </div>
         </div>
     </div>
 }
 
-
-
 @code {
-
     public IQueryable<OrganizacaoSocialDTO> OrganizacoesSociais { get; set; } = null!;
     PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
     private string termoPesquisa = string.Empty;
@@ -80,11 +83,16 @@ else
     {
         get
         {
-            var result = OrganizacoesSociais?.
-            Where(x => x.Nome.ToLower().Contains(termoPesquisa.ToLower())
+            var result = OrganizacoesSociais?
+            .Where(x => x.Nome.ToLower().Contains(termoPesquisa.ToLower())
             || x.Cnpj.ToLower().Contains(termoPesquisa.ToLower()));
             return result;
         }
+    }
+
+    private string GetRowClass(OrganizacaoSocialDTO item)
+    {
+        return item.ativo == false ? "text-muted" : "";
     }
 
     protected override async Task OnInitializedAsync()

@@ -78,6 +78,26 @@ namespace TerceiroSetor.Api.Controllers
             return CustomResponse();
         }
 
+        
+        [HttpPut("alterar-status-organizacao-social")]
+        public async Task<IActionResult> AlterarStatusOrganizacaoSocial(AlterarStatusOrganizacaoSocialCommand viewModel)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            await _mediator.Send(viewModel);
+
+            return CustomResponse();
+        }
+
+        [HttpPut("alterar-endereco-organizacao-social")]
+        public async Task<IActionResult> AlterarEnderecoOrganizacaoSocial(AlterarEnderecoOrganizacaoSocialCommand viewModel)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+            await _mediator.Send(viewModel);
+
+            return CustomResponse();
+        }
+
+
 
     }
 }

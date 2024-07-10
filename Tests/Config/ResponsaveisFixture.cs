@@ -156,8 +156,8 @@ namespace TerceiroSetor.Tests.Config
                                     /*EmailPessoal      */f.Internet.Email(),
                                     /*EmailInstitucional*/f.Internet.Email(),
                                     /*VinculoTrabalhista*/VinculoTrabalhista.CLT,
-                                    /*InicioVigencia    */f.Date.Past(4),
-                                    /*FinalVigencia     */f.Date.Past(5),
+                                    /*InicioVigencia    */f.Date.Past(5),
+                                    /*FinalVigencia     */f.Date.Past(4),
                                     /*UsuarioId         */Guid.NewGuid()
                     ));
             return responsavel.Generate();

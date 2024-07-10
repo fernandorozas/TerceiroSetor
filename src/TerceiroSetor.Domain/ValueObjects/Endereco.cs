@@ -47,6 +47,23 @@ namespace TerceiroSetor.Domain.ValueObjects
             }
             return true;
         }
+
+        public void AlterarEndereco(    String cep ,
+                                        String logradouro ,
+                                        String numeroImovel ,
+                                        String complemento , 
+                                        String bairro,
+                                        String cidade,
+                                        String estado )
+        { 
+            Cep = cep;  
+            Logradouro = logradouro;
+            NumeroImovel = numeroImovel;
+            Complemento = complemento;  
+            Bairro = bairro;        
+            Cidade = cidade;
+            Estado = estado;    
+        }
     }
 
     public class ValidatorEnderecoValido : AbstractValidator<Endereco>

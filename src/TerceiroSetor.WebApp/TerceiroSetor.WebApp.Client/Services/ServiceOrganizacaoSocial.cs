@@ -16,7 +16,8 @@ namespace TerceiroSetor.WebApp.Client.Services
         Task<ResponseResult> InformarConselhoAsync(ConselhoCommand command);
         Task<ResponseResult> EncerrarVigenciaConselho(EncerrarVigenciaConselhoCommand command);
         Task<ResponseResult> EncerrarVigenciaResponsavel(EncerrarVigenciaResponsavelCommand command);
-
+        Task<ResponseResult> AlterarStatusOrganizacaoSocial(AlterarStatusOrganizacaoSocialCommand command);
+       
     }
 
     public class ServiceOrganizacaoSocial : ServiceBase, IServiceOrganizacaoSocial
@@ -94,6 +95,26 @@ namespace TerceiroSetor.WebApp.Client.Services
         {
             var content = GetContent(command);
             var response = await _httpClient.PutAsync("/api/organizacao-social/encerrar-vigencia-responsavel", content);
+
+            if (!HandleErrors(response)) return await GetJsonResponse<ResponseResult>(response);
+
+            return ResponseOK();
+        }
+
+        public async Task<ResponseResult> InformarConselhoMembro(ConselhoMembroCommand command)
+        {
+            var content = GetContent(command);
+            var response = await _httpClient.PutAsync("/api/organizacao-social/informar-conselho-membro", content);
+
+            if (!HandleErrors(response)) return await GetJsonResponse<ResponseResult>(response);
+
+            return ResponseOK();
+        }
+
+        public async Task<ResponseResult> AlterarStatusOrganizacaoSocial(AlterarStatusOrganizacaoSocialCommand command) 
+        {
+            var content = GetContent(command);
+            var response = await _httpClient.PutAsync("/api/organizacao-social/alterar-status-organizacao-social", content);
 
             if (!HandleErrors(response)) return await GetJsonResponse<ResponseResult>(response);
 

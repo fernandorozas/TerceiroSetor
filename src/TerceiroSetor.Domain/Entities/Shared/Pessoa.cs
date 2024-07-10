@@ -1,4 +1,7 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
+using System.ComponentModel.DataAnnotations.Schema;
+using TerceiroSetor.Domain.Entities.OrganizacoesSociais;
 using TerceiroSetor.Domain.Entities.Shared;
 using TerceiroSetor.Domain.ValueObjects;
 
@@ -24,6 +27,18 @@ namespace TerceiroSetor.Domain.Entities.Shared
         public Endereco Endereco { get; private set; }
         public Guid UsuarioId { get; private set; }
         public void InformarUsuarioId(Guid usuarioId) => UsuarioId = usuarioId;
+
+        [NotMapped]
+        public ValidationResult ValidationResult { get; private set; }
+        public bool IsValid()
+        {
+            Validate();
+            return ValidationResult.IsValid;
+        }
+        private void Validate()
+        {
+            ValidationResult = new ValidatorPessoaValido().Validate(this);
+        }
     }
 }
 
@@ -86,6 +101,7 @@ public class ValidatorPessoaValido : AbstractValidator<Pessoa>
 
 
         RuleFor(x => x.EmailPessoal)
+            .NotEmpty().WithMessage("O campo EmailPessoal precisa ser fornecido")
             .EmailAddress().WithMessage("EmailPessoal em formato inválido")
             .MaximumLength(250).WithMessage("O campo EmailPessoal pode ter no máximo 250 caracteres");
 
@@ -97,7 +113,8 @@ public class ValidatorPessoaValido : AbstractValidator<Pessoa>
         .NotEmpty().WithMessage("O campo CPF precisa ser fornecido")
         .Must(ValidarCpf).WithMessage("CPF inválido");
 
-        RuleFor(x => x.Endereco).SetValidator(new ValidatorEnderecoValido());
+        RuleFor(x => x.Endereco).SetValidator(new ValidatorEnderecoValido())
+            .NotEmpty().WithMessage("Entidade Pessoa precisa ser fornecida");
         
     }
 }

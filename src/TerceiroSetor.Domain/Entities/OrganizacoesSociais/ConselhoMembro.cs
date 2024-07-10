@@ -1,4 +1,6 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
+using System.ComponentModel.DataAnnotations.Schema;
 using TerceiroSetor.Domain.Entities.Shared;
 
 namespace TerceiroSetor.Domain.Entities.OrganizacoesSociais
@@ -16,6 +18,18 @@ namespace TerceiroSetor.Domain.Entities.OrganizacoesSociais
         public Pessoa Pessoa { get; private set; }
         public DateTime InicioVigencia { get; private set; }
         public DateTime FinalVigencia { get; private set; }
+
+        [NotMapped]
+        public ValidationResult ValidationResult { get; private set; }
+        public bool IsValid()
+        {
+            Validate();
+            return ValidationResult.IsValid;
+        }
+        private void Validate()
+        {
+            ValidationResult = new ValidatorConselhoMembroValido().Validate(this);
+        }
     }
 
     public class ValidatorConselhoMembroValido : AbstractValidator<ConselhoMembro>

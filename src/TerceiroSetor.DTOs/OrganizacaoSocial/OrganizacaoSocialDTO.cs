@@ -16,6 +16,7 @@ namespace TerceiroSetor.DTOs.OrganizacoesSociais
         public string Cnpj { get; set;}
         public string ArtigoReferencia { get; set;}
         public string FinalidadeResumida { get; set;}
+        public Boolean ativo { get; set; }
         public FinalidadeDTO Finalidade { get; set;}
         public CorpoDiretivoDTO CorpoDiretivo { get; set;}
         public ICollection<ConselhoDTO> Conselhos { get; set;}

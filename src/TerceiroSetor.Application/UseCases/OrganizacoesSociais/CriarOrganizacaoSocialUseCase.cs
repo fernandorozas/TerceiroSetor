@@ -31,6 +31,7 @@ namespace TerceiroSetor.Application.UseCases.OrganizacoesSociais
             }
 
             var organizacaoSocial = _mapper.Map<OrganizacaoSocial>(viewModel);
+            organizacaoSocial.Ativo = true;
             if (!organizacaoSocial.IsValid())
             {
                 _notificator.AddNotifications(organizacaoSocial.ValidationResult);

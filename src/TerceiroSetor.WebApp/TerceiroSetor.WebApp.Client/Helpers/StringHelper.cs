@@ -16,5 +16,11 @@ namespace TerceiroSetor.WebApp.Client.Helpers
         {
             return Convert.ToUInt64(cnpj).ToString(@"00\.000\.000\/0000\-00");
         }
+
+        public static string FormatStatus(bool status)
+        {
+            if (status == true) return "Ativo";
+            else return "Inativo";
+        }
     }
 }
