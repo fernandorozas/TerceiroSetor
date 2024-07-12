@@ -41,7 +41,7 @@ namespace TerceiroSetor.Domain.Entities.OrganizacoesSociais
                  .NotEmpty().WithMessage("O campo InicioVigencia precisa ser fornecido");
 
             RuleFor(x => x.FinalVigencia)
-                .NotEmpty().WithMessage("O campo FinalVigencia precisa ser fornecido")
+                //.NotEmpty().WithMessage("O campo FinalVigencia precisa ser fornecido")
                 .GreaterThan(x => x.InicioVigencia).WithMessage("A data de fim de vigência deve ser maior que a data de início.");
 
             RuleFor(x => x.Pessoa).SetValidator(new ValidatorPessoaValido());

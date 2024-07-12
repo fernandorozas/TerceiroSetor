@@ -86,8 +86,8 @@ namespace TerceiroSetor.Tests.Config
                 .CustomInstantiator(f =>
                     new ConselhoMembro(
                                     /*Pessoa*/            Gerar_Pessoa_Valido(),
-                                    /*InicioVigencia    */f.Date.Past(5),
-                                    /*FinalVigencia     */f.Date.Past(6)
+                                    /*InicioVigencia    */f.Date.Past(1),
+                                    /*FinalVigencia     */f.Date.Future(6)
                     ));
             return conselhoMembro.Generate();
         }
@@ -111,8 +111,8 @@ namespace TerceiroSetor.Tests.Config
                 .CustomInstantiator(f =>
                     new ConselhoMembro(
                                     /*Pessoa*/            Gerar_Pessoa_Valido(),
-                                    /*InicioVigencia    */f.Date.Past(5),
-                                    /*FinalVigencia     */f.Date.Past(6)
+                                    /*InicioVigencia    */f.Date.Future(1),
+                                    /*FinalVigencia     */f.Date.Past(1)
                     ));
             return conselhoMembro.Generate();
         }

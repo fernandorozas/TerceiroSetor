@@ -38,8 +38,8 @@ namespace TerceiroSetor.Tests.Config
                                     /*EmailPessoal      */f.Internet.Email(),
                                     /*EmailInstitucional*/f.Internet.Email(),
                                     /*VinculoTrabalhista*/VinculoTrabalhista.CLT,
-                                    /*InicioVigencia    */f.Date.Past(6),
-                                    /*FinalVigencia     */f.Date.Past(5),
+                                    /*InicioVigencia    */f.Date.Past(1),
+                                    /*FinalVigencia     */f.Date.Future(1),
                                     /*UsuarioId         */Guid.NewGuid()
                     ));
             return responsavel.Generate();
@@ -156,8 +156,8 @@ namespace TerceiroSetor.Tests.Config
                                     /*EmailPessoal      */f.Internet.Email(),
                                     /*EmailInstitucional*/f.Internet.Email(),
                                     /*VinculoTrabalhista*/VinculoTrabalhista.CLT,
-                                    /*InicioVigencia    */f.Date.Past(5),
-                                    /*FinalVigencia     */f.Date.Past(4),
+                                    /*InicioVigencia    */f.Date.Future(1),
+                                    /*FinalVigencia     */f.Date.Past(1),
                                     /*UsuarioId         */Guid.NewGuid()
                     ));
             return responsavel.Generate();

@@ -7,7 +7,9 @@ namespace TerceiroSetor.Application.Queries
     public interface IQueriesOrganizacaoSocial
     {
         public Task<IEnumerable<OrganizacaoSocialDTO>> GetAllAsync();
+        public Task<OrganizacaoSocialDTO> GetByCnpj(string cnpj); // Adicionado
         public Task<OrganizacaoSocialDTO> GetById(Guid id);
+        
     }
 
     public class QueriesOrganizacaoSocial : IQueriesOrganizacaoSocial
@@ -33,5 +35,12 @@ namespace TerceiroSetor.Application.Queries
             var organizacao = await _repository.GetByIdAsync(id);
             return _mapper.Map<OrganizacaoSocialDTO>(organizacao);
         }
+
+        public async Task<OrganizacaoSocialDTO> GetByCnpj(string cnpj) // Implementado
+        {
+            var organizacao = await _repository.GetByCnpjAsync(cnpj);
+            return _mapper.Map<OrganizacaoSocialDTO>(organizacao);
+        }
+
     }
 }

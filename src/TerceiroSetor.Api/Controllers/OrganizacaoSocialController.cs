@@ -42,6 +42,13 @@ namespace TerceiroSetor.Api.Controllers
             return CustomResponse(organizacao);
         }
 
+        [HttpGet("cnpj/{cnpj}")]
+        public async Task<IActionResult> GetByCnpjAsync([FromRoute] string cnpj)
+        {
+            var organizacao = await _queries.GetByCnpj(cnpj);
+            return CustomResponse(organizacao);
+        }
+
         [HttpPut("informar-conselho")]
         public async Task<IActionResult> InformarConselho(ConselhoCommand viewModel)
         {
@@ -98,6 +105,15 @@ namespace TerceiroSetor.Api.Controllers
         }
 
 
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
+        {
+            var result = await _mediator.Send(new RemoveOrganizacaoSocialCommand(id));
+
+            if (!result) return NotFound();
+
+            return NoContent();
+        }
 
     }
 }

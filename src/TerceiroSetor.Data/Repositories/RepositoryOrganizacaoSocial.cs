@@ -1,4 +1,5 @@
-﻿using TerceiroSetor.Application.Gateways.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using TerceiroSetor.Application.Gateways.Repositories;
 using TerceiroSetor.Domain.Entities.OrganizacoesSociais;
 
 namespace TerceiroSetor.Data.Repositories
@@ -16,5 +17,15 @@ namespace TerceiroSetor.Data.Repositories
 
             await UpdateAsync(organizacaoSocial);
         }
+        public async Task<OrganizacaoSocial> GetByCnpjAsync(string cnpj)
+        {
+            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(os => os.Cnpj == cnpj);
+        }
+
+        public async Task DeleteAsync(OrganizacaoSocial organizacaoSocial)
+        {
+            _dbSet.Remove(organizacaoSocial);
+        }
+
     }
 }
