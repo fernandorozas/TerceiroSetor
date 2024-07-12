@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Bogus;
+using Bogus.Extensions.Brazil;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Json;
+using System.Text.RegularExpressions;
 using TerceiroSetor.Api.Controllers;
 using TerceiroSetor.Application.Gateways.Repositories;
 using TerceiroSetor.Application.Notifications;
@@ -141,19 +144,20 @@ namespace Tests.Service
             // Arrange
             var client = _factory.CreateClient();
             var url = "api/organizacao-social";
-            
-            var novoCnpj = /*GerarStrCnpjValido();*/"08984491000164";
+            var faker = new Faker();
+            Regex regexObj = new Regex(@"[^\d]");
+            var novoCnpj = regexObj.Replace(faker.Company.Cnpj(), "");
 
             var OrganizacaoSocialcommand = new OrganizacaoSocialCommand
             {
                 Identificacao = new OrganizacaoSocialIdentificacaoCommand
                 {
-                    Nome = "Organização Social Teste Inclusão",
+                    Nome = faker.Name.FirstName() + " " + faker.Name.LastName(),
                     TipoOrganizacaoSocial = 1, // Exemplo de tipo
                     DataConstituicao = new DateTime(2020, 1, 1),
                     Telefone = "1234567890",
                     Cnpj = novoCnpj,
-                    ArtigoReferencia = "Artigo X",
+                    ArtigoReferencia = "Artigo teste alteracao",
                     Finalidade = 1, // Exemplo de finalidade
                     FinalidadeResumida = "Uma organização social de exemplo."
                 },
