@@ -40,6 +40,8 @@ Vá até as propriedades da Solução, e na opção *Startup Project* Marque os 
 
 Pronto, agora você poderá executar a partir do Visual Studio diretamente a partir do comando *Run*
 
+O seu navegador padrão será aberto com duas janelas: uma para o swagger da aplicação, e uma contendo o frontend da aplicação.
+
 
 
 
