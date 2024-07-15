@@ -8,8 +8,8 @@ Este sistema permite o cadastramento de entidades do terceiro setor, a apresenta
 
 A documentação do projeto inclue todas as informações de negócio, requistos funcionais e não funcionais, e diagramas de eventos e classes.
 O documento pode ser encontrado nas versões:
-* Word
-* PDF
+* [Word](https://github.com/fernandorozas/TerceiroSetor/blob/master/docs/TerceiroSetor.docx)
+* [PDF](https://github.com/fernandorozas/TerceiroSetor/blob/master/docs/TerceiroSetor.pdf)
 
 # Execução Local
 
@@ -35,6 +35,8 @@ Após realizar o download do código fonte, abra o arquivo de solução, *Tercei
 Vá até as propriedades da Solução, e na opção *Startup Project* Marque os seguintes projetos com a **Action** *Start*
 * TerceiroSetor.API
 * TerceiroSetor.WebApp
+
+![enter image description here](https://github.com/fernandorozas/TerceiroSetor/blob/master/docs/Configuracoes.png)
 
 Pronto, agora você poderá executar a partir do Visual Studio diretamente a partir do comando *Run*
 
